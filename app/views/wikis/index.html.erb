@@ -1,0 +1,8 @@
+<table>
+<th>All Wikis</th>
+<% @wikis.each do |wiki| %>
+<tr>
+  <td><%= link_to wiki.title, wiki %></td>
+</tr>
+<% end %>
+</table>
