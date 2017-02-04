@@ -14,7 +14,8 @@
  *= require_self
  */
 
-
+@import "bootstrap";
+@import "bootstrap-sprockets";
 .login-box{
   width: 400px;
   height: 300px;
