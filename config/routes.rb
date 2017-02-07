@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+
+
+  resources :charges, only: [:new, :create]
+
   resources :wikis
 
   devise_for :users
@@ -8,6 +12,12 @@ Rails.application.routes.draw do
   get 'index' => 'welcome#index'
 
   root 'welcome#home'
+
+  resources :users do
+    member do
+      post :downgrade
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

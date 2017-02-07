@@ -17,3 +17,18 @@
   <br>
   <button type="button" class="btn btn-lg btn-pill btn-secondary">Premium Plan</button>
 </div>
+
+<div class = 'row'>
+
+  <div class="col-md-4 col-md-offset-2 shift-down">Create unlimited number<br>
+  of free wikis with free plan<br>
+      <% if current_user && current_user.premium? %>
+
+        <%= form_for current_user do |f| %>
+          <%= f.submit "Free", data: { confirm: "Downgrade account to free status?" },
+          class: "green-btn centered-text" %>
+          <%= f.hidden_field :role, :value => 'standard'%>
+        <% end %>
+
+      <% end %>
+  </div> 
