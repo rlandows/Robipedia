@@ -1,11 +1,29 @@
-<h1> Create a Wiki </h1>
+<h1> Edit Wiki </h1>
 
-<%= form_for @wiki do |f| %>
-   <%= f.label :title %>
-   <%= f.text_field :title %>
+<div class="row">
+    <div class="col-md-4">
+      <p> Guidelines for Wikis : </p>
+      <ul>
+        <li> Ensure your wiki is not a duplicate. </li>
+        <li> Proofread! </li>
+        <li> Fact check before posting. </li>
+      </ul>
+    </div>
+    <div class="col-md-8">
+      <%= form_for @wiki do |f| %>
+      <div class="form-group">
+        <%= f.label :title %>
+        <%= f.text_field :title, class: 'form-control', placeholder: "Enter wiki title" %>
+      </div>
 
-   <%= f.label :body %>
-   <%= f.text_area :body %>
+      <div class="form-group">
+          <%= f.label :body %>
+          <%= f.text_area :body, rows: 8, class: 'form-control', placeholder: "Enter wiki body" %>
+      </div>
 
-   <%= f.submit "Save" %>
- <% end %>
+      <%= render partial: 'wikis/form', locals: { f: f } %>
+
+      <%= f.submit "Save", class: 'btn btn-success' %>
+      <% end %>
+    </div>
+</div>

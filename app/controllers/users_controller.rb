@@ -25,6 +25,7 @@ class UsersController < ApplicationController
 
      if @user.save
        flash[:notice] = "You've been downgraded to standard. Your private wikis are now public."
+       publicize_wikis
        redirect_to :back
      else
        flash[:error] = "There was an error creating your account. Please try again."
@@ -40,4 +41,14 @@ class UsersController < ApplicationController
 
    def show
    end
- end
+
+
+ private
+
+ def publicize_wikis
+     current_user.wikis.each do |wiki|
+      wiki.update_attribute(:private, false)
+     end
+   end
+
+end

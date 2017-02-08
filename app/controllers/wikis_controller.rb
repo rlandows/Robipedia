@@ -3,7 +3,12 @@ class WikisController < ApplicationController
 
   after_action :verify_authorized, :except => :index
   def index
-    @wikis = Wiki.all
+
+    if current_user.premium? || current_user.admin?
+      @wikis = Wiki.all
+    else
+      @wikis = Wiki.where(private: false)
+    end
   end
 
   def show
@@ -20,6 +25,12 @@ class WikisController < ApplicationController
     @wiki = Wiki.new
     @wiki.title = params[:wiki][:title]
     @wiki.body = params[:wiki][:body]
+
+    if current_user.standard?
+        @wiki.update_attribute(:private, false)
+      end
+
+      @wiki.user = current_user
     authorize @wiki
 
     if @wiki.save
@@ -53,7 +64,7 @@ class WikisController < ApplicationController
 
     if @wiki.save
       flash[:notice] = "Wiki has been updated."
-      redirect_to @wiki
+
     else
       flash.now[:alert] = "There was an issue saving the Wiki. Please try again."
       render :edit
@@ -72,4 +83,11 @@ class WikisController < ApplicationController
       render :show
     end
   end
+
+  private
+
+  def wiki_params
+    params.require(:wiki).permit(:title, :body, :private)
+  end
+
 end

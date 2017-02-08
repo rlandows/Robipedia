@@ -32,8 +32,13 @@ class ChargesController < ApplicationController
  end
 
  def new
+  #  puts "ENV['STRIPE_PUBLISHABLE_KEY']"
+  #  puts Figaro.env.stripe_publishable_key
+  #  puts ENV["stripe_publishable_key"]
+   puts "Can you see me?"
+   puts "#{Rails.configuration.stripe[:publishable_key]}"
    @stripe_btn_data = {
-     key: "#{ Rails.configuration.stripe[:publishable_key] }",
+     key: Figaro.env.stripe_publishable_key,
      description: "Premium Membership - #{current_user.email}",
      amount: 15_00
    }
