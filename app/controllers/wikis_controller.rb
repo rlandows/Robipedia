@@ -69,6 +69,7 @@ class WikisController < ApplicationController
       flash.now[:alert] = "There was an issue saving the Wiki. Please try again."
       render :edit
     end
+    
   end
 
   def destroy
