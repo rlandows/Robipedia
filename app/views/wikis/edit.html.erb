@@ -23,6 +23,17 @@
 
       <%= render partial: 'wikis/form', locals: { f: f } %>
 
+      <div class="form-group">
+          <p>Collaborators</p>
+          <% collaboration_users = @wiki.collaboration_users %>
+          <% User.all.each do |user| %>
+            <div class="user">
+              <%= check_box_tag "wiki[collaboration_user_ids][]", user.id, collaboration_users.include?(user) %>
+              <%= user.email %>
+            </div>
+          <% end %>
+        </div>
+
       <%= f.submit "Save", class: 'btn btn-success' %>
       <% end %>
     </div>

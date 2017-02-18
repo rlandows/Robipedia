@@ -4,11 +4,7 @@ class WikisController < ApplicationController
   after_action :verify_authorized, :except => :index
   def index
 
-    if current_user.premium? || current_user.admin?
-      @wikis = Wiki.all
-    else
-      @wikis = Wiki.where(private: false)
-    end
+    @wikis = policy_scope(Wiki)
   end
 
   def show
@@ -22,10 +18,7 @@ class WikisController < ApplicationController
   end
 
   def create
-    @wiki = Wiki.new
-    @wiki.title = params[:wiki][:title]
-    @wiki.body = params[:wiki][:body]
-
+    @wiki = Wiki.new(wiki_params)
     if current_user.standard?
         @wiki.update_attribute(:private, false)
       end
@@ -41,6 +34,8 @@ class WikisController < ApplicationController
       flash.now[:alert] = "There was an error, please try again."
       render :new
     end
+
+
   end
 
   def edit
@@ -50,18 +45,13 @@ class WikisController < ApplicationController
 
   def update
     @wiki = Wiki.find(params[:id])
-    @wiki.title = params[:wiki][:title]
-    @wiki.body = params[:wiki][:body]
-
-    authorize @wiki
-    if @wiki.update_attributes(wiki_params)
-      flash[:notice] = "Wiki was successfully updated."
-      redirect_to @wiki
-    else
-      flash[:error] = "There was an error editing the post. Please try again."
-      redirect_to :edit
-    end
-
+   authorize @wiki
+   if @wiki.update_attributes(wiki_params)
+     redirect_to @wiki, notice: "Wiki updated sucessfully"
+   else
+     flash[:error] = "Error, please try again"
+     render :edit
+   end
     if @wiki.save
       flash[:notice] = "Wiki has been updated."
 
@@ -69,7 +59,7 @@ class WikisController < ApplicationController
       flash.now[:alert] = "There was an issue saving the Wiki. Please try again."
       render :edit
     end
-    
+
   end
 
   def destroy
@@ -88,7 +78,7 @@ class WikisController < ApplicationController
   private
 
   def wiki_params
-    params.require(:wiki).permit(:title, :body, :private)
+    params.require(:wiki).permit(:title, :body, :private, :collaboration_user_ids => [ ])
   end
 
 end
